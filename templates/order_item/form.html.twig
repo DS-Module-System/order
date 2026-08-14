@@ -1,0 +1,21 @@
+{% import 'core/default_templates/form_table_macro.html.twig' as form_table %}
+
+{% set is_edit = is_edit_route(app.request.get('_route')) %}
+{% set form_btns = form_table.btns_for_modal(form, is_edit) %}
+{% set fields = form_table.generateFormRows(form) %}
+
+{% block body %}
+    {% embed 'core/default_templates/_form.html.twig' %}
+        {% block head_title %}
+            {{ is_edit ? 'order_item.editOrderItemTitle'|dtrans : 'order_item.createOrderItemTitle'|dtrans }}
+        {% endblock %}
+
+        {% block form_fields %}
+            {{ fields }}
+        {% endblock %}
+
+        {% block form_btns %}
+            {{ form_btns }}
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

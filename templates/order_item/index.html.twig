@@ -1,0 +1,33 @@
+{% import 'core/default_templates/data_table_macro.html.twig' as data_table %}
+
+{% block body %}
+
+    {# Data table с конфигурация #}
+    {{ data_table.table(rows, {
+        "newLink": data_table.new_btn('order_item_create', {"orderId": app.request.get('orderId')}),
+        "cols" : {
+            "tableAction": {
+                "label": "core.module.actionTitle",
+                "edit": path('order_item_edit', {"id": -1, "orderId": app.request.get('orderId')}),
+            },
+            "product.name": {
+                "label": "order_item.product",
+            },
+            "warehouse.name": {
+                "label": "order_item.warehouse",
+            },
+            "quantity": {
+                "label": "order_item.quantity",
+                "type": "currency",
+            },
+            "unitPrice": {
+                "label": "order_item.unitPrice",
+                "type": "currency",
+            },
+            "totalPrice": {
+                "label": "order_item.totalPrice",
+                "type": "currency",
+            },
+        }
+    }) }}
+{% endblock %}

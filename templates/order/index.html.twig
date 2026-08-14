@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% import 'core/default_templates/form_search.html.twig' as form_search %}
+{% import 'core/default_templates/data_table_macro.html.twig' as data_table %}
+
+{% block body %}
+    {# Search form с полета за търсене #}
+    {{ form_search.form_search(form, ["client", "orderDateFrom", "orderDateTo"]) }}
+
+    {# Data table с конфигурация #}
+    {{ data_table.table(rows, {
+        "newLink": data_table.new_btn('order_create'),
+        "cols" : {
+            "tableAction": {
+                "label": "core.module.actionTitle",
+                "edit": path('order_edit', {"id": -1}),
+            },
+            "orderDate": {
+                "label": "order.orderDate",
+                "type": "date",
+            },
+            "client.name": {
+                "label": "order.client",
+            },
+            "description": {
+                "label": "order.description",
+            },
+            "createdAt": {
+                "label": "order.created_at",
+                "type": "datetime",
+            },
+        }
+    }) }}
+{% endblock %}

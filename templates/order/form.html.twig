@@ -1,0 +1,49 @@
+{% extends is_modal_request() ? 'core/modal-form-base.html.twig' : 'base.html.twig' %}
+
+{% import 'core/default_templates/form_table_macro.html.twig' as form_table %}
+
+{% set is_edit = is_edit_route(app.request.get('_route')) %}
+{% set form_btns = form_table.btns('order_list', form, is_edit) %}
+{% set fields = form_table.generateFormRows(form) %}
+
+{% set headerTitle = '' %}
+{% if is_edit == false %}
+    {% set headerTitle = 'order.createOrderTitle'|dtrans %}
+{% else %}
+    {% set headerTitle = 'order.editOrderTitle'|dtrans %}
+{% endif %}
+
+{% set formOptions = {
+    'template': is_modal_request() ? 'core/default_templates/_form_modal.html.twig' : 'core/default_templates/_form.html.twig',
+} %}
+
+{% block body %}
+    {% embed formOptions.template with formOptions %}
+        {% block head_title %}
+            {{ headerTitle }}
+        {% endblock %}
+
+        {% block form_fields %}
+            {{ fields }}
+        {% endblock %}
+
+        {% block form_btns %}
+            {{ form_btns }}
+        {% endblock %}
+    {% endembed %}
+
+    {% if is_edit %}
+        <div class="card mt-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>{{ 'order.itemsCardTitle'|dtrans }}</span>
+                <div class="order-total-section">
+                    <strong>{{ 'order.totalPrice'|dtrans }}: <span id="order-total-price">{{ form.vars.data.totalPrice|number_format(2) }} лв.</span></strong>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="api-v1" data-url-list="{{ path('order_item_list', {'orderId': form.vars.data.id}) }}" data-trigger-event-reload="order_item_list" data-trigger-event-reload-data="{{ form.vars.data.id }}"></div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
